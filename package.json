@@ -1,0 +1,60 @@
+{
+  "name": "gym-manager-api",
+  "version": "0.0.1",
+  "description": "API backend para gerenciamento de matrículas em academia, com controle de alunos, planos, mensalidades, pagamentos manuais, inadimplência e cobranças por e-mail.",
+  "keywords": [
+    "nodejs",
+    "docker",
+    "jwt",
+    "express",
+    "typescript",
+    "backend",
+    "postgresql",
+    "api-rest",
+    "email-notifications",
+    "membership-management",
+    "prisma",
+    "gym-management",
+    "zod",
+    "payment-control"
+  ],
+  "homepage": "https://github.com/sh-douglas/gym-manager-api#readme",
+  "bugs": {
+    "url": "https://github.com/sh-douglas/gym-manager-api/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sh-douglas/gym-manager-api.git"
+  },
+  "license": "ISC",
+  "author": "Douglas",
+  "type": "module",
+  "main": "dist/server.js",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "check": "tsc --noEmit",
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix"
+  },
+  "dependencies": {
+    "@prisma/client": "^7.8.0",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/node": "^26.1.1",
+    "eslint": "^10.6.0",
+    "globals": "^17.7.0",
+    "prisma": "^7.8.0",
+    "tsx": "^4.23.0",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.63.0"
+  }
+}
