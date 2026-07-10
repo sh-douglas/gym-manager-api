@@ -10,11 +10,14 @@ const envSchema = z.object({
   JWT_SECRET: z
     .string()
     .trim()
-    .min(16, { message: "Este campo deve conter no mínimo 16 caracteres" }),
+    .min(16, { message: "This field must contain at least 16 characters" }),
   JWT_EXPIRES_IN: z.enum(["15m", "30m", "1h", "2h", "12h", "1d", "7d"]),
-  POSTGRES_USER: z.string().trim().min(1, "O campo não pode estar vazio."),
-  POSTGRES_PASSWORD: z.string().trim().min(1, "O campo não pode estar vazio."),
-  POSTGRES_DB: z.string().trim().min(1, "O campo não pode estar vazio."),
+  POSTGRES_USER: z.string().trim().min(1, "This field cannot be left blank."),
+  POSTGRES_PASSWORD: z
+    .string()
+    .trim()
+    .min(1, "This field cannot be left blank."),
+  POSTGRES_DB: z.string().trim().min(1, "This field cannot be left blank."),
   POSTGRES_PORT: z.coerce.number().int().positive().default(5432),
   DATABASE_URL: z.string().trim().url().startsWith("postgresql://"),
 });
