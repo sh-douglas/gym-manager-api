@@ -4,9 +4,9 @@ import AppError from "../errors/app-error.js";
 
 function errorHandler(
   error: Error,
-  req: Request,
+  _req: Request,
   res: Response,
-  next: NextFunction,
+  _next: NextFunction,
 ) {
   if (error instanceof AppError) {
     res.status(error.statusCode).json({ error: error.message });
