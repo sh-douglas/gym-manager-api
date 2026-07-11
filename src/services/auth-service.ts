@@ -81,6 +81,25 @@ class AuthService {
       token,
     };
   }
+
+  async me(id: string) {
+    const user = await UserRepository.findById(id);
+
+    if (!user) {
+      throw new AppError("Your token or session is no longer valid.", 401);
+    }
+
+    const publicUserData = {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+    };
+
+    return publicUserData;
+  }
 }
 
 export default new AuthService();
