@@ -24,7 +24,27 @@ model User {
   @@map("users")
 }
 
+model Student {
+  id        String        @id @default(uuid())
+  name      String
+  email     String        @unique
+  phone     String?       @unique
+  document  String        @unique
+  birthDate DateTime      @db.Date
+  status    StudentStatus @default(INACTIVE)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  @@map("students")
+}
+
 enum Role {
   ADMIN
   MANAGER
+}
+
+enum StudentStatus {
+  ACTIVE
+  INACTIVE
+  BLOCKED
 }
