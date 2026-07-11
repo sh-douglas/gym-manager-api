@@ -12,6 +12,16 @@ class StudentController {
       next(error);
     }
   }
+
+  async findAll(req: Request, res: Response, next: NextFunction) {
+    try {
+      const students = await StudentService.findAll();
+
+      res.status(200).json(students);
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 export default new StudentController();

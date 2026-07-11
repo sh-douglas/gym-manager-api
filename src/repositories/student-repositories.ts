@@ -15,6 +15,10 @@ class StudentRepository {
     });
   }
 
+  async findAll() {
+    return prisma.student.findMany();
+  }
+
   async findByEmail(email: string) {
     return prisma.student.findUnique({
       where: { email },

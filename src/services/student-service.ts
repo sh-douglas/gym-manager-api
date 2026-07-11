@@ -47,6 +47,12 @@ class StudentService {
 
     return createdStudent;
   }
+
+  async findAll() {
+    const students = await StudentRepository.findAll();
+
+    return students;
+  }
 }
 
 export default new StudentService();
