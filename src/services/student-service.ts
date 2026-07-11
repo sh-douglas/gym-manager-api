@@ -53,6 +53,16 @@ class StudentService {
 
     return students;
   }
+
+  async findById(id: string) {
+    const student = await StudentRepository.findById(id);
+
+    if (!student) {
+      throw new AppError("Student not found.", 404);
+    }
+
+    return student;
+  }
 }
 
 export default new StudentService();

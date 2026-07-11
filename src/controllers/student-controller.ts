@@ -17,7 +17,21 @@ class StudentController {
     try {
       const students = await StudentService.findAll();
 
-      res.status(200).json(students);
+      return res.status(200).json(students);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async findById(
+    req: Request<{ id: string }>,
+    res: Response,
+    next: NextFunction,
+  ) {
+    try {
+      const student = await StudentService.findById(req.params.id);
+
+      return res.status(200).json(student);
     } catch (error) {
       next(error);
     }

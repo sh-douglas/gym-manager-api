@@ -19,6 +19,13 @@ class StudentRepository {
     return prisma.student.findMany();
   }
 
+  async findById(id: string) {
+    return prisma.student.findUnique({
+      where: { id },
+    });
+  }
+
+  // Métodos auxiliares.
   async findByEmail(email: string) {
     return prisma.student.findUnique({
       where: { email },
