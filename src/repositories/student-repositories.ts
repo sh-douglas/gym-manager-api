@@ -8,6 +8,13 @@ interface CreateStudentRepositoryInput {
   birthDate: Date;
 }
 
+interface UpdateStudentRepositoryInput {
+  name?: string;
+  email?: string;
+  phone?: string;
+  birthDate?: Date;
+}
+
 class StudentRepository {
   async create(data: CreateStudentRepositoryInput) {
     return prisma.student.create({
@@ -22,6 +29,13 @@ class StudentRepository {
   async findById(id: string) {
     return prisma.student.findUnique({
       where: { id },
+    });
+  }
+
+  async updateStudent(id: string, data: UpdateStudentRepositoryInput) {
+    return prisma.student.update({
+      where: { id },
+      data,
     });
   }
 

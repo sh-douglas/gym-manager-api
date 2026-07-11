@@ -36,6 +36,23 @@ class StudentController {
       next(error);
     }
   }
+
+  async updateStudent(
+    req: Request<{ id: string }>,
+    res: Response,
+    next: NextFunction,
+  ) {
+    try {
+      const student = await StudentService.updateStudent(
+        req.params.id,
+        req.body,
+      );
+
+      return res.status(200).json(student);
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 export default new StudentController();
