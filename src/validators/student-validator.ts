@@ -50,12 +50,19 @@ const updateStudentSchema = z
     },
   );
 
+const updateStudentStatusSchema = z.object({
+  status: z.enum(["ACTIVE", "INACTIVE", "BLOCKED"]),
+});
+
 type CreateStudentInput = z.infer<typeof createStudentSchema>;
 type UpdateStudentInput = z.infer<typeof updateStudentSchema>;
+type UpdateStudentStatusInput = z.infer<typeof updateStudentStatusSchema>;
 
 export {
   createStudentSchema,
   type CreateStudentInput,
   updateStudentSchema,
   type UpdateStudentInput,
+  updateStudentStatusSchema,
+  type UpdateStudentStatusInput,
 };

@@ -1,3 +1,4 @@
+import { StudentStatus } from "../generated/prisma/enums.js";
 import prisma from "../prisma/prisma.js";
 
 interface CreateStudentRepositoryInput {
@@ -36,6 +37,13 @@ class StudentRepository {
     return prisma.student.update({
       where: { id },
       data,
+    });
+  }
+
+  async updateStudentStatus(id: string, status: StudentStatus) {
+    return prisma.student.update({
+      where: { id },
+      data: { status },
     });
   }
 

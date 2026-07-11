@@ -5,6 +5,8 @@ import {
   type CreateStudentInput,
   updateStudentSchema,
   type UpdateStudentInput,
+  updateStudentStatusSchema,
+  type UpdateStudentStatusInput,
 } from "../validators/student-validator.js";
 
 class StudentService {
@@ -111,6 +113,23 @@ class StudentService {
     );
 
     return updatedStudent;
+  }
+
+  async updateStudentStatus(id: string, status: UpdateStudentStatusInput) {
+    const parsedData = updateStudentStatusSchema.parse(status);
+
+    const student = await StudentRepository.findById(id);
+
+    if (!student) {
+      throw new AppError("Student not found.", 404);
+    }
+
+    const updatedStudentStatus = await StudentRepository.updateStudentStatus(
+      id,
+      parsedData.status,
+    );
+
+    return updatedStudentStatus;
   }
 }
 
