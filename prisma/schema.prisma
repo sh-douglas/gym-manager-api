@@ -38,6 +38,19 @@ model Student {
   @@map("students")
 }
 
+model Plan {
+  id               String   @id @default(uuid())
+  name             String   @unique
+  description      String?
+  price            Decimal  @db.Decimal(10, 2)
+  durationInMonths Int
+  isActive         Boolean  @default(true)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@map("plans")
+}
+
 enum Role {
   ADMIN
   MANAGER
