@@ -54,9 +54,14 @@ const updateStudentStatusSchema = z.object({
   status: z.enum(["ACTIVE", "INACTIVE", "BLOCKED"]),
 });
 
+const listStudentsQuerySchema = z.object({
+  status: z.enum(["ACTIVE", "INACTIVE", "BLOCKED"]).optional(),
+});
+
 type CreateStudentInput = z.infer<typeof createStudentSchema>;
 type UpdateStudentInput = z.infer<typeof updateStudentSchema>;
 type UpdateStudentStatusInput = z.infer<typeof updateStudentStatusSchema>;
+type ListStudentQueryInput = z.infer<typeof listStudentsQuerySchema>;
 
 export {
   createStudentSchema,
@@ -65,4 +70,6 @@ export {
   type UpdateStudentInput,
   updateStudentStatusSchema,
   type UpdateStudentStatusInput,
+  listStudentsQuerySchema,
+  type ListStudentQueryInput,
 };

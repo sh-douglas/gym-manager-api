@@ -15,7 +15,7 @@ class StudentController {
 
   async findAll(req: Request, res: Response, next: NextFunction) {
     try {
-      const students = await StudentService.findAll();
+      const students = await StudentService.findAll(req.query);
 
       return res.status(200).json(students);
     } catch (error) {

@@ -7,6 +7,8 @@ import {
   type UpdateStudentInput,
   updateStudentStatusSchema,
   type UpdateStudentStatusInput,
+  listStudentsQuerySchema,
+  type ListStudentQueryInput,
 } from "../validators/student-validator.js";
 
 class StudentService {
@@ -52,8 +54,11 @@ class StudentService {
     return createdStudent;
   }
 
-  async findAll() {
-    const students = await StudentRepository.findAll();
+  async findAll(query: unknown) {
+    const parsedQuery: ListStudentQueryInput =
+      listStudentsQuerySchema.parse(query);
+
+    const students = await StudentRepository.findAll(parsedQuery.status);
 
     return students;
   }

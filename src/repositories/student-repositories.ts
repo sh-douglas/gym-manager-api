@@ -23,7 +23,16 @@ class StudentRepository {
     });
   }
 
-  async findAll() {
+  async findAll(status?: StudentStatus) {
+    if (status) {
+      return prisma.student.findMany({
+        where: { status },
+        orderBy: {
+          createdAt: "asc",
+        },
+      });
+    }
+
     return prisma.student.findMany();
   }
 
