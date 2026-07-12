@@ -3,6 +3,7 @@ import cors from "cors";
 
 import authRoutes from "./routes/auth-routes.js";
 import studentRoutes from "./routes/student-routes.js";
+import planRoutes from "./routes/plan-routes.js";
 
 import notFound from "./middlewares/not-found.js";
 import errorHandler from "./middlewares/error-handler.js";
@@ -14,6 +15,7 @@ app.use(express.json());
 
 app.use("/auth/", authRoutes);
 app.use("/students", studentRoutes);
+app.use("/plan", planRoutes);
 
 app.get("/health", (req, res) => {
   res.json({

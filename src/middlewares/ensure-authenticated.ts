@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import type { Request, Response, NextFunction } from "express";
 import AppError from "../errors/app-error.js";
 import { env } from "../config/env.js";
-import UserRepository from "../repositories/user-repositories.js";
+import UserRepository from "../repositories/user-repository.js";
 
 async function ensureAuthenticated(
   req: Request,

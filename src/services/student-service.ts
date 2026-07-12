@@ -1,5 +1,5 @@
 import AppError from "../errors/app-error.js";
-import StudentRepository from "../repositories/student-repositories.js";
+import StudentRepository from "../repositories/student-repository.js";
 import {
   createStudentSchema,
   type CreateStudentInput,
@@ -11,7 +11,7 @@ import {
   // type ListStudentQueryInput,
 } from "../validators/student-validator.js";
 
-import type { FindStudentsFilters } from "../repositories/student-repositories.js";
+import type { FindStudentsFilters } from "../repositories/student-repository.js";
 
 class StudentService {
   async create(data: CreateStudentInput) {

@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import { Role } from "../generated/prisma/enums.js";
 import AppError from "../errors/app-error.js";
-import UserRepository from "../repositories/user-repositories.js";
+import UserRepository from "../repositories/user-repository.js";
 import {
   signInSchema,
   signUpSchema,
