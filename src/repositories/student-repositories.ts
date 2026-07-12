@@ -16,6 +16,11 @@ interface UpdateStudentRepositoryInput {
   birthDate?: Date;
 }
 
+export interface FindStudentsFilters {
+  status?: StudentStatus;
+  search?: string;
+}
+
 class StudentRepository {
   async create(data: CreateStudentRepositoryInput) {
     return prisma.student.create({
@@ -23,17 +28,23 @@ class StudentRepository {
     });
   }
 
-  async findAll(status?: StudentStatus) {
-    if (status) {
-      return prisma.student.findMany({
-        where: { status },
-        orderBy: {
-          createdAt: "asc",
-        },
-      });
-    }
-
-    return prisma.student.findMany();
+  async findAll({ search, status }: FindStudentsFilters) {
+    return prisma.student.findMany({
+      where: {
+        ...(status && { status }),
+        ...(search && {
+          OR: [
+            { name: { contains: search }, mode: "insensitive" },
+            { email: { contains: search }, mode: "insensitive" },
+            { document: { contains: search } },
+            { phone: { contains: search } },
+          ],
+        }),
+      },
+      orderBy: {
+        createdAt: "asc",
+      },
+    });
   }
 
   async findById(id: string) {

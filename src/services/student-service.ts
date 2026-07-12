@@ -8,8 +8,10 @@ import {
   updateStudentStatusSchema,
   type UpdateStudentStatusInput,
   listStudentsQuerySchema,
-  type ListStudentQueryInput,
+  // type ListStudentQueryInput,
 } from "../validators/student-validator.js";
+
+import type { FindStudentsFilters } from "../repositories/student-repositories.js";
 
 class StudentService {
   async create(data: CreateStudentInput) {
@@ -55,10 +57,18 @@ class StudentService {
   }
 
   async findAll(query: unknown) {
-    const parsedQuery: ListStudentQueryInput =
-      listStudentsQuerySchema.parse(query);
+    const parsedQuery = listStudentsQuerySchema.parse(query);
 
-    const students = await StudentRepository.findAll(parsedQuery.status);
+    const filters: FindStudentsFilters = {
+      ...(parsedQuery.status !== undefined && {
+        status: parsedQuery.status,
+      }),
+      ...(parsedQuery.search !== undefined && {
+        search: parsedQuery.search,
+      }),
+    };
+
+    const students = await StudentRepository.findAll(filters);
 
     return students;
   }

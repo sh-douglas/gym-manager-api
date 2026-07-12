@@ -56,6 +56,11 @@ const updateStudentStatusSchema = z.object({
 
 const listStudentsQuerySchema = z.object({
   status: z.enum(["ACTIVE", "INACTIVE", "BLOCKED"]).optional(),
+  search: z
+    .string()
+    .trim()
+    .min(3, "The name field must contain at least 3 characters.")
+    .optional(),
 });
 
 type CreateStudentInput = z.infer<typeof createStudentSchema>;
