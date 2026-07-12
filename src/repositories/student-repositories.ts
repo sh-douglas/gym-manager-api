@@ -34,8 +34,8 @@ class StudentRepository {
         ...(status && { status }),
         ...(search && {
           OR: [
-            { name: { contains: search }, mode: "insensitive" },
-            { email: { contains: search }, mode: "insensitive" },
+            { name: { contains: search, mode: "insensitive" } },
+            { email: { contains: search, mode: "insensitive" } },
             { document: { contains: search } },
             { phone: { contains: search } },
           ],
