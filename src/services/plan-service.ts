@@ -4,8 +4,10 @@ import PlanRepository from "../repositories/plan-repository.js";
 import {
   createPlanSchema,
   updatePlanSchema,
+  updatePlanStatusSchema,
   type CreatePlanInput,
   type UpdatePlanInput,
+  type UpdatePlanStatusInput,
 } from "../validators/plan-validator.js";
 
 class PlanService {
@@ -87,6 +89,22 @@ class PlanService {
     const updatedPlan = await PlanRepository.update(id, updatePlanData);
 
     return updatedPlan;
+  }
+
+  async updatePlanStatus(id: string, data: UpdatePlanStatusInput) {
+    const parsedStatus = updatePlanStatusSchema.parse(data);
+    const registeredPlan = await PlanRepository.findById(id);
+
+    if (!registeredPlan) {
+      throw new AppError("Plan not found.", 404);
+    }
+
+    const updatedPlanStatus = await PlanRepository.updateStatus(
+      id,
+      parsedStatus.isActive,
+    );
+
+    return updatedPlanStatus;
   }
 }
 
