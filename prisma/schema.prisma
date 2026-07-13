@@ -25,39 +25,66 @@ model User {
 }
 
 model Student {
-  id        String        @id @default(uuid())
-  name      String
-  email     String        @unique
-  phone     String?       @unique
-  document  String        @unique
-  birthDate DateTime      @db.Date
-  status    StudentStatus @default(INACTIVE)
-  createdAt DateTime      @default(now())
-  updatedAt DateTime      @updatedAt
+  id          String        @id @default(uuid())
+  name        String
+  email       String        @unique
+  phone       String?       @unique
+  document    String        @unique
+  birthDate   DateTime      @db.Date
+  enrollments Enrollment[]
+  status      StudentStatus @default(INACTIVE)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
 
   @@map("students")
 }
 
 model Plan {
-  id               String   @id @default(uuid())
-  name             String   @unique
+  id               String       @id @default(uuid())
+  name             String       @unique
   description      String?
-  price            Decimal  @db.Decimal(10, 2)
+  price            Decimal      @db.Decimal(10, 2)
   durationInMonths Int
-  isActive         Boolean  @default(true)
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+  isActive         Boolean      @default(true)
+  enrollments      Enrollment[]
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
 
   @@map("plans")
 }
 
-enum Role {
-  ADMIN
-  MANAGER
+model Enrollment {
+  id              String           @id @default(uuid())
+  student         Student          @relation(fields: [studentId], references: [id])
+  studentId       String
+  plan            Plan             @relation(fields: [planId], references: [id])
+  planId          String
+  startDate       DateTime         @db.Date
+  endDate         DateTime         @db.Date
+  status          EnrollmentStatus @default(ACTIVE)
+  contractedPrice Decimal          @db.Decimal(10, 2)
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  @@index([studentId, status])
+  @@index([planId])
+  @@map("enrollments")
 }
 
 enum StudentStatus {
   ACTIVE
   INACTIVE
   BLOCKED
+}
+
+enum EnrollmentStatus {
+  ACTIVE
+  CANCELED
+  EXPIRED
+  SUSPENDED
+}
+
+enum Role {
+  ADMIN
+  MANAGER
 }
