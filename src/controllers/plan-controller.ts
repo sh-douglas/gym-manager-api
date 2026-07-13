@@ -14,7 +14,7 @@ class PlanController {
 
   async findAll(req: Request, res: Response, next: NextFunction) {
     try {
-      const plans = await PlanService.findAll();
+      const plans = await PlanService.findAll(req.query);
 
       return res.status(200).json(plans);
     } catch (error) {

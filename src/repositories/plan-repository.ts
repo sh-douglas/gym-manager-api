@@ -15,6 +15,11 @@ interface UpdatePlanRepositoryInput {
   durationInMonths?: number;
 }
 
+export interface PlanQueryInput {
+  isActive?: boolean;
+  search?: string;
+}
+
 class PlanRepository {
   async create(data: CreatePlanRepositoryInput) {
     return prisma.plan.create({
@@ -28,10 +33,18 @@ class PlanRepository {
     });
   }
 
-  async findAll() {
+  async findAll(filters: PlanQueryInput) {
     return prisma.plan.findMany({
-      orderBy: {
-        name: "asc",
+      where: {
+        ...(filters.isActive !== undefined && {
+          isActive: filters.isActive,
+        }),
+        ...(filters.search && {
+          name: {
+            contains: filters.search,
+            mode: "insensitive",
+          },
+        }),
       },
     });
   }

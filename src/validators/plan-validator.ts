@@ -72,6 +72,7 @@ const queryBooleanSchema = z
 
 const listPlansQuerySchema = z.object({
   isActive: queryBooleanSchema.optional(),
+  search: z.string().trim().min(3).optional(),
 });
 
 type CreatePlanInput = z.infer<typeof createPlanSchema>;

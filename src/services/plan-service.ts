@@ -1,8 +1,11 @@
 import AppError from "../errors/app-error.js";
 import { Prisma } from "../generated/prisma/client.js";
-import PlanRepository from "../repositories/plan-repository.js";
+import PlanRepository, {
+  type PlanQueryInput,
+} from "../repositories/plan-repository.js";
 import {
   createPlanSchema,
+  listPlansQuerySchema,
   updatePlanSchema,
   updatePlanStatusSchema,
   type CreatePlanInput,
@@ -35,8 +38,19 @@ class PlanService {
     return plan;
   }
 
-  async findAll() {
-    const plans = PlanRepository.findAll();
+  async findAll(query: unknown) {
+    const parsedQuery = listPlansQuerySchema.parse(query);
+
+    const filters: PlanQueryInput = {
+      ...(parsedQuery.isActive !== undefined && {
+        isActive: parsedQuery.isActive,
+      }),
+      ...(parsedQuery.search !== undefined && {
+        search: parsedQuery.search,
+      }),
+    };
+
+    const plans = await PlanRepository.findAll(filters);
 
     return plans;
   }
