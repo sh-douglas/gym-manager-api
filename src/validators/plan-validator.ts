@@ -66,9 +66,18 @@ const updatePlanStatusSchema = z.object({
   isActive: z.boolean(),
 });
 
+const queryBooleanSchema = z
+  .enum(["true", "false"])
+  .transform((value) => value === "true");
+
+const listPlansQuerySchema = z.object({
+  isActive: queryBooleanSchema.optional(),
+});
+
 type CreatePlanInput = z.infer<typeof createPlanSchema>;
 type UpdatePlanInput = z.infer<typeof updatePlanSchema>;
 type UpdatePlanStatusInput = z.infer<typeof updatePlanStatusSchema>;
+type ListPlansQueryInput = z.infer<typeof listPlansQuerySchema>;
 
 export {
   createPlanSchema,
@@ -77,4 +86,6 @@ export {
   type UpdatePlanInput,
   updatePlanStatusSchema,
   type UpdatePlanStatusInput,
+  listPlansQuerySchema,
+  type ListPlansQueryInput,
 };
