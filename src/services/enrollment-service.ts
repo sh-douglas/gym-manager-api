@@ -1,10 +1,13 @@
 import AppError from "../errors/app-error.js";
+import { EnrollmentStatus } from "../generated/prisma/enums.js";
 import EnrollmentRepository from "../repositories/enrollment-repository.js";
 import PlanRepository from "../repositories/plan-repository.js";
 import StudentRepository from "../repositories/student-repository.js";
 import {
   createEnrollmentSchema,
   type CreateEnrollmentInput,
+  updateEnrollmentStatusSchema,
+  type UpdateEnrollmentStatusInput,
 } from "../validators/enrollment-validator.js";
 
 class EnrollmentService {
@@ -65,6 +68,49 @@ class EnrollmentService {
     });
 
     return enrollment;
+  }
+
+  async findAll() {
+    const enrollments = await EnrollmentRepository.findAll();
+
+    return enrollments;
+  }
+
+  async findById(id: string) {
+    const enrollment = await EnrollmentRepository.findById(id);
+
+    if (!enrollment) {
+      throw new AppError("Enrollment not found.", 404);
+    }
+
+    return enrollment;
+  }
+
+  async updateStatus(id: string, data: UpdateEnrollmentStatusInput) {
+    const parsedStatus = updateEnrollmentStatusSchema.parse(data);
+    const enrollment = await EnrollmentRepository.findById(id);
+
+    if (!enrollment) {
+      throw new AppError("Enrollment not found.", 404);
+    }
+
+    if (enrollment.status === parsedStatus.status) {
+      throw new AppError("You cannot change the status to the same one.", 409);
+    }
+
+    if (
+      enrollment.status === EnrollmentStatus.CANCELED &&
+      parsedStatus.status === EnrollmentStatus.ACTIVE
+    ) {
+      throw new AppError("This registration cannot be reactivated.", 409);
+    }
+
+    const updatedEnrollment = await EnrollmentRepository.updateStatus(
+      id,
+      parsedStatus.status,
+    );
+
+    return updatedEnrollment;
   }
 }
 
