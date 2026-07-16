@@ -24,6 +24,44 @@ class EnrollmentRepository {
       },
     });
   }
+
+  async findAll() {
+    return prisma.enrollment.findMany({
+      include: {
+        student: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            phone: true,
+          },
+        },
+        plan: {
+          select: {
+            id: true,
+            name: true,
+            price: true,
+            durationInMonths: true,
+          },
+        },
+      },
+    });
+  }
+
+  async findById(id: string) {
+    return prisma.enrollment.findUnique({
+      where: {
+        id,
+      },
+    });
+  }
+
+  async updateStatus(id: string, status: EnrollmentStatus) {
+    return prisma.enrollment.update({
+      where: { id },
+      data: { status },
+    });
+  }
 }
 
 export default new EnrollmentRepository();
