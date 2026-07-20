@@ -1,7 +1,9 @@
-import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
-import { Role } from "../generated/prisma/enums.js";
+import jwt from "jsonwebtoken";
+
+import { env } from "../config/env.js";
 import AppError from "../errors/app-error.js";
+import { Role } from "../generated/prisma/enums.js";
 import UserRepository from "../repositories/user-repository.js";
 import {
   signInSchema,
@@ -9,7 +11,6 @@ import {
   type SignInInput,
   type SignUpInput,
 } from "../validators/auth-validator.js";
-import { env } from "../config/env.js";
 
 class AuthService {
   async signUp(data: SignUpInput) {
@@ -18,7 +19,7 @@ class AuthService {
     const registeredUser = await UserRepository.findByEmail(parsedData.email);
 
     if (registeredUser) {
-      throw new AppError("Email already registered.", 409);
+      throw new AppError("Email already in use.", 409);
     }
 
     const salt = await bcrypt.genSalt(12);

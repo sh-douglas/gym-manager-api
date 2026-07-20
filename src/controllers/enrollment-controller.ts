@@ -37,16 +37,41 @@ class EnrollmentController {
     }
   }
 
-  async updateStatus(
+  async cancel(
     req: Request<{ id: string }>,
     res: Response,
     next: NextFunction,
   ) {
     try {
-      const enrollment = await EnrollmentService.updateStatus(
-        req.params.id,
-        req.body,
-      );
+      const enrollment = await EnrollmentService.cancel(req.params.id);
+
+      return res.status(200).json(enrollment);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async suspend(
+    req: Request<{ id: string }>,
+    res: Response,
+    next: NextFunction,
+  ) {
+    try {
+      const enrollment = await EnrollmentService.suspend(req.params.id);
+
+      return res.status(200).json(enrollment);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async reactivate(
+    req: Request<{ id: string }>,
+    res: Response,
+    next: NextFunction,
+  ) {
+    try {
+      const enrollment = await EnrollmentService.reactivate(req.params.id);
 
       return res.status(200).json(enrollment);
     } catch (error) {

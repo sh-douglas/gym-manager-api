@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { EnrollmentStatus } from "../generated/prisma/enums.js";
 
 const createEnrollmentSchema = z.object({
   studentId: z.uuid(),
@@ -25,16 +24,6 @@ const createEnrollmentSchema = z.object({
     ),
 });
 
-const updateEnrollmentStatusSchema = z.object({
-  status: z.enum(EnrollmentStatus),
-});
-
 type CreateEnrollmentInput = z.infer<typeof createEnrollmentSchema>;
-type UpdateEnrollmentStatusInput = z.infer<typeof updateEnrollmentStatusSchema>;
 
-export {
-  createEnrollmentSchema,
-  type CreateEnrollmentInput,
-  updateEnrollmentStatusSchema,
-  type UpdateEnrollmentStatusInput,
-};
+export { createEnrollmentSchema, type CreateEnrollmentInput };

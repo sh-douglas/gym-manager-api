@@ -6,8 +6,6 @@ import StudentRepository from "../repositories/student-repository.js";
 import {
   createEnrollmentSchema,
   type CreateEnrollmentInput,
-  updateEnrollmentStatusSchema,
-  type UpdateEnrollmentStatusInput,
 } from "../validators/enrollment-validator.js";
 
 class EnrollmentService {
@@ -86,31 +84,76 @@ class EnrollmentService {
     return enrollment;
   }
 
-  async updateStatus(id: string, data: UpdateEnrollmentStatusInput) {
-    const parsedStatus = updateEnrollmentStatusSchema.parse(data);
+  async cancel(id: string) {
     const enrollment = await EnrollmentRepository.findById(id);
 
     if (!enrollment) {
       throw new AppError("Enrollment not found.", 404);
     }
 
-    if (enrollment.status === parsedStatus.status) {
-      throw new AppError("You cannot change the status to the same one.", 409);
+    if (enrollment.status === "CANCELED") {
+      throw new AppError("This enrollment has already been canceled.", 409);
     }
 
-    if (
-      enrollment.status === EnrollmentStatus.CANCELED &&
-      parsedStatus.status === EnrollmentStatus.ACTIVE
-    ) {
-      throw new AppError("This registration cannot be reactivated.", 409);
+    if (enrollment.status === "EXPIRED") {
+      throw new AppError(
+        "It is not possible to change the status of expired enrollments.",
+        409,
+      );
     }
 
-    const updatedEnrollment = await EnrollmentRepository.updateStatus(
+    const canceledEnrollment = await EnrollmentRepository.updateStatus(
       id,
-      parsedStatus.status,
+      EnrollmentStatus.CANCELED,
     );
 
-    return updatedEnrollment;
+    return canceledEnrollment;
+  }
+
+  async suspend(id: string) {
+    const enrollment = await EnrollmentRepository.findById(id);
+
+    if (!enrollment) {
+      throw new AppError("Enrollment not found.", 404);
+    }
+
+    if (enrollment.status !== "ACTIVE") {
+      throw new AppError("Only active enrollments can be suspended.", 409);
+    }
+
+    const suspendedEnrollment = await EnrollmentRepository.updateStatus(
+      id,
+      EnrollmentStatus.SUSPENDED,
+    );
+
+    return suspendedEnrollment;
+  }
+
+  async reactivate(id: string) {
+    const enrollment = await EnrollmentRepository.findById(id);
+
+    if (!enrollment) {
+      throw new AppError("Enrollment not found.", 404);
+    }
+
+    if (enrollment.status !== "SUSPENDED") {
+      throw new AppError("This enrollment cannot be reactivated.", 409);
+    }
+
+    const enrollmentActive = await EnrollmentRepository.findActiveByStudentId(
+      enrollment.studentId,
+    );
+
+    if (enrollmentActive) {
+      throw new AppError("Student already has another active enrollment.", 409);
+    }
+
+    const reactivatedEnrollment = await EnrollmentRepository.updateStatus(
+      id,
+      EnrollmentStatus.ACTIVE,
+    );
+
+    return reactivatedEnrollment;
   }
 }
 
